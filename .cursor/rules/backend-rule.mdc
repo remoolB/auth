@@ -1,0 +1,106 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+## 后端开发规范
+
+为确保项目代码质量和一致性，所有开发者请遵循以下规范：
+
+### 1. 项目结构与分层原则
+
+本项目采用领域驱动设计(DDD)架构，请严格遵循以下分层原则：
+
+#### 1.1 基础设施层 (infrastructure)
+- 存放所有技术实现细节，如数据库、缓存、外部服务集成等
+- 不应包含业务逻辑
+- 子目录说明：
+  - `config/`: 配置相关代码
+  - `consts/`: 常量定义，包括错误码
+  - `email/`: 邮件服务实现
+  - `jwt/`: JWT相关工具
+  - `mapper/`: 数据访问对象定义
+  - `util/`: 通用工具类，如Redis、MongoDB连接等
+
+#### 1.2 数据访问层 (mapper)
+- 负责数据持久化操作
+- 定义实体结构和基本CRUD操作
+- 不应包含业务规则或逻辑
+
+#### 1.3 领域层 (domain)
+- 定义核心业务实体和业务规则
+- 应该是最稳定的层，变化最少
+
+#### 1.4 应用层 (application)
+- 协调领域层与适配器层
+- 实现业务用例和流程
+- 子目录说明：
+  - `service/`: 服务实现
+  - `dto/`: 数据传输对象定义
+
+#### 1.5 适配器层 (adaptor)
+- 处理HTTP请求和响应
+- 负责路由注册和请求验证
+- 子目录说明：
+  - `controller/`: 控制器，处理请求
+  - `middleware/`: 中间件
+  - `router/`: 路由定义
+
+### 2. 命名规范
+
+#### 2.1 文件命名
+- 使用小写字母和下划线，如 `user_dao.go`，`object_id.go`
+- 根据功能分类组织文件，如验证相关的放在 `verification.go`
+- 测试文件使用 `_test.go` 后缀
+
+#### 2.2 变量命名
+- 私有变量和函数使用小驼峰(camelCase)，如 `userEmail`
+- 公有变量、函数和类型使用大驼峰(PascalCase)，如 `UserService`，`HandleLoginFail`
+- 常量使用驼峰命名，在常量块内组织，如 `ErrSystem`，`ErrUserNotExist`
+
+#### 2.3 接口和结构体
+- 接口名以"I"开头，如 `IUserDAO`
+- 实现类通常去掉"I"前缀，如 `UserDAO`
+- 使用后缀"Impl"表示接口实现，如 `AuthServiceImpl`
+
+#### 2.4 函数命名
+- 使用描述性的动词开头，如 `GetUserInfo`，`SendVerificationCode`
+- CRUD操作使用 `Create`，`Find`，`Update`，`Delete` 命名
+- 辅助函数根据功能命名，如 `GenerateVerificationCode`，`ObjectIDToInt64`
+
+### 3. 错误处理规范
+
+#### 3.1 错误返回
+- 所有错误必须被处理或返回
+- 优先使用自定义错误类型 
+
+#### 3.2 错误记录
+- 关键错误必须记录到日志
+- 敏感信息不应出现在错误消息中
+
+#### 3.3 错误码规范
+- 错误码定义在 `consts/errors.go` 文件中
+- 使用统一的错误码格式和范围划分
+
+### 4. 工具函数规范
+
+#### 4.1 基础设施工具
+- 通用工具函数放在 `infrastructure/util/` 目录下
+- 功能相关工具函数按模块分文件存放，如：
+  - `verification.go`: 验证码相关
+  - `redis.go`: Redis操作相关
+  - `mongodb.go`: MongoDB操作相关
+  - `login_security.go`: 登录安全相关
+
+
+### 5. 文档规范
+
+#### 5.1 代码注释
+- 所有公开函数必须有注释说明功能和参数
+- 复杂逻辑必须有流程说明注释
+
+#### 5.2 API文档
+- 所有API接口必须在README.md文档中说明
+- 文档必须包含：URL、方法、参数、响应和错误信息
+
+遵循以上规范，有助于保持代码质量和项目的可维护性。如有疑问，请与项目负责人讨论。

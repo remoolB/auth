@@ -59,7 +59,7 @@ func GetConfig() *AppConfig {
 			Redis: RedisConfig{
 				Host:     "127.0.0.1",
 				Port:     6379,
-				Password: "",
+				Password: "ruoyi123",
 				DB:       0,
 			},
 			Email: EmailConfig{
